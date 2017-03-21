@@ -29,10 +29,10 @@ def decision_tree_learning(examples, attributes, parent_examples, rand):
     #Finding best value for attribute A.
     for value in A[0][1]:
         exs = [ex for ex in examples if ex[A[0][0]] == str(value)]
-        #Need to copy the attributes list such that I don't chance other recursive data.
+        #Need to copy the attributes list such that I don't change other recursive data.
         tempAttributes = attributes.copy()
         tempAttributes.remove(A[0])
-        tree["{}:{}".format(A[0][0], value)] = decision_tree_learning(exs, tempAttributes, examples, random)
+        tree["{}:{}".format(A[0][0], value)] = decision_tree_learning(exs, tempAttributes, examples, rand)
     return tree
 
 #Random importance function, just return a random attribute.
@@ -51,7 +51,6 @@ def importance(a, examples):
         else:
             attributes[line[a]][1] += 1
             attributes['s'][1] += 1
-    #print(attributes)
     return gain(attributes)
 
 #Calculates the gain of the current attributes using the entpropy function.
@@ -99,6 +98,7 @@ def treePrint(tree):
             else: print("\t" * count + "\t" + str(tree[sub]))
     treePrintInternal(tree, 0)
 
+#Function to measure the effect of traning, based on the book.
 def measure(test, training, attributes, rand):
     #Function that scores the example
     def score(tree, node, line):
@@ -123,8 +123,6 @@ def measure(test, training, attributes, rand):
     plot = []
     for length in range(1, len(training)+1):
         tree = decision_tree_learning(training[0:length], attributes, [], rand)
-        print("New tree")
-        print(tree)
         if not isinstance(tree, dict):
             avg.append(0.5)
         else:
@@ -140,16 +138,17 @@ def main():
     training = readfile("training.txt")
     test = readfile("test.txt")
 
-    #random_tree = decision_tree_learning(training, attributes, [], True)
+    random_tree = decision_tree_learning(training, attributes, [], True)
     #tree = decision_tree_learning(training, attributes, [], False)
+    #treePrint(random_tree)
 
     res = measure(test, training, attributes, False)
-    #res_random = measure(test, training, attributes, True)
+    res_random = measure(test, training, attributes, True)
     print("ENTROPY IMPORTANCE FUNCTION PLOT MEASUREMENT")
     for a in range(len(res)):
         print("("+str(a+1)+","+str(res[a])+")")
-    #print("RANDOM IMPORTANCE FUNCTION PLOT MEASUREMENT")
-    #for b in res_random:
-    #    print(b)
+    print("RANDOM IMPORTANCE FUNCTION PLOT MEASUREMENT")
+    for a in res_random:
+        print("("+str(a+1)+","+str(res_random[a])+")")
 
 main()
