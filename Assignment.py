@@ -70,7 +70,7 @@ def entpropy(pos, neg):
     if pos == 0 or neg == 0: return 0
     return -pos * math.log(pos,2) -neg * math.log(neg,2)
 
-#Finds the attribute with highest amount of interesting values
+#Finds the class with highest amount of interesting values
 def plurality_value(examples):
     pv = {}
     for example in examples:
@@ -139,16 +139,23 @@ def main():
     test = readfile("test.txt")
 
     random_tree = decision_tree_learning(training, attributes, [], True)
-    #tree = decision_tree_learning(training, attributes, [], False)
-    #treePrint(random_tree)
+    tree = decision_tree_learning(training, attributes, [], False)
 
-    res = measure(test, training, attributes, False)
-    res_random = measure(test, training, attributes, True)
-    print("ENTROPY IMPORTANCE FUNCTION PLOT MEASUREMENT")
-    for a in range(len(res)):
-        print("("+str(a+1)+","+str(res[a])+")")
-    print("RANDOM IMPORTANCE FUNCTION PLOT MEASUREMENT")
-    for a in res_random:
-        print("("+str(a+1)+","+str(res_random[a])+")")
+    #Printing the final trees for random and entropy with dataset of 100
+    print("TREE WITH ENTROPY IMPORTANCE")
+    treePrint(tree)
+    print("TREE WITH RANDOM IMPORTANCE")
+    treePrint(random_tree)
+
+    ##UNCOMMENT THE CODE BELOW TO SEE MEASUREMENTS##
+
+    #res = measure(test, training, attributes, False)
+    #res_random = measure(test, training, attributes, True)
+    #print("ENTROPY IMPORTANCE FUNCTION PLOT MEASUREMENT")
+    #for a in range(len(res)):
+    #    print("("+str(a+1)+","+str(res[a])+")")
+    #print("RANDOM IMPORTANCE FUNCTION PLOT MEASUREMENT")
+    #for a in range(len(res_random)):
+    #    print("("+str(a+1)+","+str(res_random[a])+")")
 
 main()
